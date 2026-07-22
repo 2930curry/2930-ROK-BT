@@ -5,164 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2930 ROK 도시 배치</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Malgun Gothic', 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 1.1em;
-        }
-
-        .grid-container {
-            background: white;
-            border-radius: 12px;
-            padding: 40px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            overflow: auto;
-            perspective: 1200px;
-        }
-
-        .grid-wrapper {
-            display: inline-block;
-            transform: rotateX(15deg) rotateZ(45deg);
-            transform-style: preserve-3d;
-            margin: 60px auto;
-        }
-
-        .grid {
-            display: grid;
-            gap: 2px;
-            background: #f0f0f0;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: inset 0 4px 12px rgba(0,0,0,0.05);
-        }
-
-        .grid-cell {
-            min-width: 60px;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            text-align: center;
-            word-break: break-all;
-            padding: 8px;
-            transition: all 0.2s ease;
-            cursor: default;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .grid-cell:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            transform: scale(1.05);
-        }
-
-        .grid-cell.empty {
-            background: #fafafa;
-            border-color: #eee;
-        }
-
-        .grid-cell.city {
-            background: #e3f2fd;
-            border-color: #90caf9;
-            color: #1565c0;
-        }
-
-        .grid-cell.building {
-            background: #fff3e0;
-            border-color: #ffe0b2;
-            color: #e65100;
-        }
-
-        .grid-cell.special {
-            background: #f3e5f5;
-            border-color: #ce93d8;
-            color: #6a1b9a;
-            font-weight: 700;
-        }
-
-        .grid-cell.merge-start {
-            box-shadow: inset 0 0 0 2px #ff6b6b;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
-            font-size: 1.2em;
-        }
-
-        .error {
-            background: #ffebee;
-            border: 2px solid #ff6b6b;
-            border-radius: 12px;
-            padding: 20px;
-            color: #c62828;
-            font-size: 1.1em;
-            text-align: center;
-        }
-
-        .info {
-            background: #e8f5e9;
-            border-left: 4px solid #4caf50;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            color: #2e7d32;
-        }
-
-        @media (max-width: 768px) {
-            .grid-wrapper {
-                transform: rotateX(10deg) rotateZ(45deg) scale(0.8);
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .grid-cell {
-                min-width: 45px;
-                min-height: 45px;
-                font-size: 10px;
-                padding: 4px;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Malgun Gothic', 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 20px; min-height: 100vh; }
+        .container { max-width: 100%; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header h1 { font-size: 2.5em; color: #333; margin-bottom: 8px; }
+        .header p { color: #666; font-size: 1.1em; }
+        .grid-container { background: white; border-radius: 12px; padding: 40px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); overflow: auto; perspective: 1200px; }
+        .grid-wrapper { display: inline-block; transform: rotateX(15deg) rotateZ(45deg); transform-style: preserve-3d; margin: 60px auto; }
+        .grid { display: grid; gap: 2px; background: #f0f0f0; padding: 20px; border-radius: 8px; }
+        .grid-cell { min-width: 60px; min-height: 60px; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center; padding: 8px; }
+        .grid-cell:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: scale(1.05); }
+        .loading { text-align: center; padding: 60px 20px; color: #999; font-size: 1.2em; }
+        .error { background: #ffebee; border: 2px solid #ff6b6b; border-radius: 12px; padding: 20px; color: #c62828; font-size: 1.1em; text-align: center; }
     </style>
 </head>
 <body>
@@ -171,17 +26,13 @@
             <h1>🏙️ 2930 ROK 도시 배치도</h1>
             <p>스프레드시트 데이터 실시간 동기화</p>
         </div>
-
         <div class="grid-container">
-            <div id="content" class="loading">
-                📊 데이터 로딩 중...
-            </div>
+            <div id="content" class="loading">📊 데이터 로딩 중...</div>
         </div>
     </div>
 
     <script>
-        // AppScript URL
-        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyS5oooxsC0detIHrNGd6pQVoUzWXlZopor1doajI801R3OOqo_isKu-EUMyxZMhuV3/exec";
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyraCFQ8nYpFd95Imnh500XLA0tMPzHkDvJOAQVZ4HiRh2MtIBRarDNbtOoNyCrqfhk/exec";
 
         async function loadData() {
             try {
@@ -195,18 +46,9 @@
                 renderGrid(data);
             } catch (error) {
                 document.getElementById('content').innerHTML =
-                    `<div class="error">❌ 데이터 로드 실패: ${error.message}<br><small>AppScript URL을 확인하세요</small></div>`;
+                    `<div class="error">❌ 데이터 로드 실패: ${error.message}</div>`;
                 console.error('Load error:', error);
             }
-        }
-
-        function getCellType(value) {
-            if (!value) return 'empty';
-            const strVal = String(value).trim();
-            if (strVal === '도시') return 'city';
-            if (/^BT\d+$/.test(strVal)) return 'building';
-            if (strVal && strVal !== '도시') return 'special';
-            return 'empty';
         }
 
         function renderGrid(data) {
@@ -218,57 +60,24 @@
                 return;
             }
 
-            let gridHTML = `
-                <div class="info">
-                    📐 ${rows}행 × ${cols}열 격자 | 셀 병합 정보 포함 | 45도 회전 뷰
-                </div>
-                <div class="grid-wrapper">
-                    <div class="grid" style="grid-template-columns: repeat(${cols}, 60px);">
-            `;
+            let gridHTML = `<div class="grid-wrapper"><div class="grid" style="grid-template-columns: repeat(${cols}, 60px);">`;
 
             for (let row = 0; row < rows; row++) {
                 for (let col = 0; col < cols; col++) {
                     const cell = gridData[row]?.[col];
                     if (!cell) continue;
 
-                    // 병합된 셀의 시작점이 아니면 스킵
-                    if (cell.merge && !cell.isStart) {
-                        continue;
-                    }
-
-                    const value = cell.value;
-                    const cellType = getCellType(value);
-                    const colSpan = cell.merge ? (cell.merge.endCol - cell.merge.startCol + 1) : 1;
-                    const rowSpan = cell.merge ? (cell.merge.endRow - cell.merge.startRow + 1) : 1;
-
-                    const style = `
-                        grid-column: span ${colSpan};
-                        grid-row: span ${rowSpan};
-                        background: ${cell.background || 'white'};
-                    `;
-
-                    gridHTML += `
-                        <div class="grid-cell ${cellType} ${cell.merge ? 'merge-start' : ''}"
-                             style="${style}"
-                             title="행:${row + 2} 열:${String.fromCharCode(73 + col)}">
-                            ${value}
-                        </div>
-                    `;
+                    const value = cell.value || '';
+                    const bg = cell.background || 'white';
+                    gridHTML += `<div class="grid-cell" style="background: ${bg};">${value}</div>`;
                 }
             }
 
-            gridHTML += `
-                    </div>
-                </div>
-            `;
-
+            gridHTML += `</div></div>`;
             document.getElementById('content').innerHTML = gridHTML;
         }
 
-        // 페이지 로드 시 데이터 받기
         loadData();
-
-        // 5분마다 자동 새로고침
         setInterval(loadData, 5 * 60 * 1000);
     </script>
 </body>
