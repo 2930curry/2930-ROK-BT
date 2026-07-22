@@ -7,14 +7,15 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Malgun Gothic', 'Segoe UI', Arial, sans-serif; background: #f5f5f5; padding: 12px; }
-        .container { max-width: 100%; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; }
-        .header { text-align: center; margin-bottom: 30px; position: relative; z-index: 10; }
+        .container { max-width: 100%; margin: 0 auto; background: white; border-radius: 16px; padding: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 100vh; }
+        .header { text-align: center; padding: 30px 40px; border-bottom: 1px solid #eee; flex-shrink: 0; }
         .header h1 { font-size: 2.8em; color: #333; margin: 0; }
-        .content { display: flex; justify-content: center; perspective: 1200px; padding: 80px 40px; position: relative; z-index: 1; }
-        .grid-wrapper { display: inline-block; transform: rotateX(15deg) rotateZ(45deg); transform-style: preserve-3d; }
-        .grid { display: grid; gap: 2px; background: #f0f0f0; padding: 20px; border-radius: 8px; }
+        .content { flex: 1; overflow: auto; display: flex; justify-content: center; align-items: center; padding: 40px; perspective: 1200px; }
+        .grid-wrapper { display: inline-block; transform-origin: center; transition: transform 0.2s; }
+        .grid { display: grid; gap: 2px; background: #f0f0f0; padding: 40px; border-radius: 8px; }
         .grid-cell { min-width: 60px; min-height: 60px; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #000; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center; padding: 8px; color: #000; }
         .loading { text-align: center; padding: 40px; color: #999; }
+        .zoom-info { position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.7); color: white; padding: 10px 15px; border-radius: 8px; font-size: 12px; z-index: 100; }
     </style>
 </head>
 <body>
@@ -22,13 +23,15 @@
         <div class="header">
             <h1>🏙️ 2930 ROK 도시 배치도</h1>
         </div>
-        <div class="content">
+        <div class="content" id="content-area">
             <div id="content" class="loading">데이터 로딩 중...</div>
         </div>
     </div>
+    <div class="zoom-info">🔍 Ctrl + 휠로 줌 조절</div>
 
     <script>
         const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzg4qfIVlU2F4ACrf3ZCr967A6jErpo0Vko8CctJluJSnFOwfFclYhPMzrtrR9aFW-o/exec";
+        let zoom = 1;
 
         async function loadData() {
             try {
@@ -45,7 +48,7 @@
             const { data: gridData, cols, rows } = data;
             if (!gridData || gridData.length === 0) return;
 
-            let gridHTML = `<div class="grid-wrapper"><div class="grid" style="grid-template-columns: repeat(${cols}, 60px);">`;
+            let gridHTML = `<div class="grid-wrapper" id="grid-wrapper"><div class="grid" style="grid-template-columns: repeat(${cols}, 60px);">`;
             for (let row = 0; row < rows; row++) {
                 for (let col = 0; col < cols; col++) {
                     const cell = gridData[row]?.[col];
@@ -59,7 +62,24 @@
             }
             gridHTML += `</div></div>`;
             document.getElementById('content').innerHTML = gridHTML;
+            updateGridTransform();
         }
+
+        function updateGridTransform() {
+            const wrapper = document.getElementById('grid-wrapper');
+            if (wrapper) {
+                wrapper.style.transform = `scale(${zoom}) rotateX(15deg) rotateZ(45deg)`;
+            }
+        }
+
+        document.getElementById('content-area').addEventListener('wheel', (e) => {
+            if (e.ctrlKey) {
+                e.preventDefault();
+                zoom += (e.deltaY > 0 ? -0.1 : 0.1);
+                zoom = Math.max(0.5, Math.min(3, zoom));
+                updateGridTransform();
+            }
+        });
 
         loadData();
         setInterval(loadData, 5 * 60 * 1000);
