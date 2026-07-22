@@ -10,7 +10,7 @@
         .container { max-width: 100%; margin: 0 auto; background: white; border-radius: 16px; padding: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: flex; flex-direction: column; height: 100vh; }
         .header { text-align: center; padding: 30px 40px; border-bottom: 1px solid #eee; flex-shrink: 0; }
         .header h1 { font-size: 2.8em; color: #333; margin: 0; }
-        .content { flex: 1; overflow: auto; display: flex; justify-content: center; align-items: center; padding: 40px; perspective: 1200px; }
+        .content { flex: 1; overflow: auto; display: flex; justify-content: center; align-items: center; padding: 150px 80px 80px 80px; perspective: 1200px; }
         .grid-wrapper { display: inline-block; transform-origin: center; transition: transform 0.2s; }
         .grid { display: grid; gap: 2px; background: #f0f0f0; padding: 40px; border-radius: 8px; }
         .grid-cell { min-width: 60px; min-height: 60px; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #000; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center; padding: 8px; color: #000; }
@@ -47,42 +47,3 @@
         function renderGrid(data) {
             const { data: gridData, cols, rows } = data;
             if (!gridData || gridData.length === 0) return;
-
-            let gridHTML = `<div class="grid-wrapper" id="grid-wrapper"><div class="grid" style="grid-template-columns: repeat(${cols}, 60px);">`;
-            for (let row = 0; row < rows; row++) {
-                for (let col = 0; col < cols; col++) {
-                    const cell = gridData[row]?.[col];
-                    if (!cell) continue;
-
-                    const value = cell.value || '';
-                    const bg = cell.background || 'white';
-
-                    gridHTML += `<div class="grid-cell" style="background: ${bg}; color: #000;">${value}</div>`;
-                }
-            }
-            gridHTML += `</div></div>`;
-            document.getElementById('content').innerHTML = gridHTML;
-            updateGridTransform();
-        }
-
-        function updateGridTransform() {
-            const wrapper = document.getElementById('grid-wrapper');
-            if (wrapper) {
-                wrapper.style.transform = `scale(${zoom}) rotateX(15deg) rotateZ(45deg)`;
-            }
-        }
-
-        document.getElementById('content-area').addEventListener('wheel', (e) => {
-            if (e.ctrlKey) {
-                e.preventDefault();
-                zoom += (e.deltaY > 0 ? -0.1 : 0.1);
-                zoom = Math.max(0.5, Math.min(3, zoom));
-                updateGridTransform();
-            }
-        });
-
-        loadData();
-        setInterval(loadData, 5 * 60 * 1000);
-    </script>
-</body>
-</html>
