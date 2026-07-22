@@ -11,8 +11,8 @@
         .header { text-align: center; margin-bottom: 30px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .header h1 { font-size: 2.5em; color: #333; margin-bottom: 8px; }
         .header p { color: #666; font-size: 1.1em; }
-        .grid-container { background: white; border-radius: 12px; padding: 40px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); overflow: auto; perspective: 1200px; }
-        .grid-wrapper { display: inline-block; transform: rotateX(15deg) rotateZ(45deg); transform-style: preserve-3d; margin: 60px auto; }
+        .grid-container { background: white; border-radius: 12px; padding: 80px 40px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); overflow: visible; perspective: 1200px; display: flex; justify-content: center; }
+        .grid-wrapper { display: inline-block; transform: rotateX(15deg) rotateZ(45deg); transform-style: preserve-3d; }
         .grid { display: grid; gap: 2px; background: #f0f0f0; padding: 20px; border-radius: 8px; }
         .grid-cell { min-width: 60px; min-height: 60px; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center; padding: 8px; }
         .grid-cell:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: scale(1.05); }
@@ -32,7 +32,7 @@
     </div>
 
     <script>
-        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyraCFQ8nYpFd95Imnh500XLA0tMPzHkDvJOAQVZ4HiRh2MtIBRarDNbtOoNyCrqfhk/exec";
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuuG7Ld71NxRD44XvnpNEMz1ydXVSYjHBqMd1wnSQOVRhWcYlAatN5wbacZoypjZme/exec";
 
         async function loadData() {
             try {
@@ -67,9 +67,14 @@
                     const cell = gridData[row]?.[col];
                     if (!cell) continue;
 
+                    if (cell.merge && !cell.isStart) continue;
+
                     const value = cell.value || '';
                     const bg = cell.background || 'white';
-                    gridHTML += `<div class="grid-cell" style="background: ${bg};">${value}</div>`;
+                    const colSpan = cell.merge ? (cell.merge.endCol - cell.merge.startCol + 1) : 1;
+                    const rowSpan = cell.merge ? (cell.merge.endRow - cell.merge.startRow + 1) : 1;
+
+                    gridHTML += `<div class="grid-cell" style="background: ${bg}; grid-column: span ${colSpan}; grid-row: span ${rowSpan};">${value}</div>`;
                 }
             }
 
