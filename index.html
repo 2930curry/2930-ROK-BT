@@ -10,10 +10,11 @@
         .container { max-width: 100%; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         .header { text-align: center; margin-bottom: 30px; }
         .header h1 { font-size: 2.8em; color: #333; margin: 0; }
-        .content { display: flex; justify-content: center; perspective: 1200px; }
+        .content { display: flex; justify-content: center; perspective: 1200px; padding: 80px 40px; }
         .grid-wrapper { display: inline-block; transform: rotateX(15deg) rotateZ(45deg); transform-style: preserve-3d; }
         .grid { display: grid; gap: 2px; background: #f0f0f0; padding: 20px; border-radius: 8px; }
-        .grid-cell { min-width: 60px; min-height: 60px; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center; padding: 8px; }
+        .grid-cell { min-width: 60px; min-height: 60px; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center; padding: 8px; color: #000; }
+        .grid-cell.merged { border-color: #000; }
         .loading { text-align: center; padding: 40px; color: #999; }
     </style>
 </head>
@@ -28,7 +29,7 @@
     </div>
 
     <script>
-        const APP_SCRIPT_URL = "새로받은URL";
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzg4qfIVlU2F4ACrf3ZCr967A6jErpo0Vko8CctJluJSnFOwfFclYhPMzrtrR9aFW-o/exec";
 
         async function loadData() {
             try {
@@ -49,10 +50,15 @@
             for (let row = 0; row < rows; row++) {
                 for (let col = 0; col < cols; col++) {
                     const cell = gridData[row]?.[col];
-                    if (!cell) continue;
+                    if (!cell || !cell.isStart) continue;
+
                     const value = cell.value || '';
                     const bg = cell.background || 'white';
-                    gridHTML += `<div class="grid-cell" style="background: ${bg};">${value}</div>`;
+                    const colSpan = cell.merge ? (cell.merge.endCol - cell.merge.startCol + 1) : 1;
+                    const rowSpan = cell.merge ? (cell.merge.endRow - cell.merge.startRow + 1) : 1;
+                    const mergeClass = cell.merge ? 'merged' : '';
+
+                    gridHTML += `<div class="grid-cell ${mergeClass}" style="background: ${bg}; grid-column: span ${colSpan}; grid-row: span ${rowSpan}; color: #000;">${value}</div>`;
                 }
             }
             gridHTML += `</div></div>`;
