@@ -7,14 +7,13 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Malgun Gothic', 'Segoe UI', Arial, sans-serif; background: #f5f5f5; padding: 12px; }
-        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .header { text-align: center; margin-bottom: 20px; }
-        .header h1 { font-size: 2.8em; color: #333; }
-        .grid-container { display: flex; justify-content: center; perspective: 1200px; padding: 40px; }
+        .container { max-width: 100%; margin: 0 auto; background: white; border-radius: 16px; padding: 40px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 2.8em; color: #333; margin: 0; }
+        .content { display: flex; justify-content: center; perspective: 1200px; }
         .grid-wrapper { display: inline-block; transform: rotateX(15deg) rotateZ(45deg); transform-style: preserve-3d; }
         .grid { display: grid; gap: 2px; background: #f0f0f0; padding: 20px; border-radius: 8px; }
         .grid-cell { min-width: 60px; min-height: 60px; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center; padding: 8px; }
-        .grid-cell:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
         .loading { text-align: center; padding: 40px; color: #999; }
     </style>
 </head>
@@ -23,11 +22,13 @@
         <div class="header">
             <h1>🏙️ 2930 ROK 도시 배치도</h1>
         </div>
-        <div id="content" class="loading">데이터 로딩 중...</div>
+        <div class="content">
+            <div id="content" class="loading">데이터 로딩 중...</div>
+        </div>
     </div>
 
     <script>
-        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzg4qfIVlU2F4ACrf3ZCr967A6jErpo0Vko8CctJluJSnFOwfFclYhPMzrtrR9aFW-o/exec";
+        const APP_SCRIPT_URL = "새로받은URL";
 
         async function loadData() {
             try {
