@@ -6,29 +6,24 @@
     <title>2930 ROK 도시 배치</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Malgun Gothic', 'Segoe UI', Arial, sans-serif; background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 20px; min-height: 100vh; }
-        .container { max-width: 100%; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 30px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .header h1 { font-size: 2.5em; color: #333; margin-bottom: 8px; }
-        .header p { color: #666; font-size: 1.1em; }
-        .grid-container { background: white; border-radius: 12px; padding: 80px 40px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); overflow: visible; perspective: 1200px; display: flex; justify-content: center; }
+        body { font-family: 'Malgun Gothic', 'Segoe UI', Arial, sans-serif; background: #f5f5f5; padding: 12px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 16px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 20px; }
+        .header h1 { font-size: 2.8em; color: #333; }
+        .grid-container { display: flex; justify-content: center; perspective: 1200px; padding: 40px; }
         .grid-wrapper { display: inline-block; transform: rotateX(15deg) rotateZ(45deg); transform-style: preserve-3d; }
         .grid { display: grid; gap: 2px; background: #f0f0f0; padding: 20px; border-radius: 8px; }
         .grid-cell { min-width: 60px; min-height: 60px; display: flex; align-items: center; justify-content: center; background: white; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; font-weight: 600; text-align: center; padding: 8px; }
-        .grid-cell:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: scale(1.05); }
-        .loading { text-align: center; padding: 60px 20px; color: #999; font-size: 1.2em; }
-        .error { background: #ffebee; border: 2px solid #ff6b6b; border-radius: 12px; padding: 20px; color: #c62828; font-size: 1.1em; text-align: center; }
+        .grid-cell:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .loading { text-align: center; padding: 40px; color: #999; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>🏙️ 2930 ROK 도시 배치도</h1>
-            <p>스프레드시트 데이터 실시간 동기화</p>
         </div>
-        <div class="grid-container">
-            <div id="content" class="loading">📊 데이터 로딩 중...</div>
-        </div>
+        <div id="content" class="loading">데이터 로딩 중...</div>
     </div>
 
     <script>
@@ -38,46 +33,27 @@
             try {
                 const response = await fetch(APP_SCRIPT_URL);
                 const data = await response.json();
-
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-
+                if (data.error) throw new Error(data.error);
                 renderGrid(data);
             } catch (error) {
-                document.getElementById('content').innerHTML =
-                    `<div class="error">❌ 데이터 로드 실패: ${error.message}</div>`;
                 console.error('Load error:', error);
             }
         }
 
         function renderGrid(data) {
             const { data: gridData, cols, rows } = data;
-
-            if (!gridData || gridData.length === 0) {
-                document.getElementById('content').innerHTML =
-                    '<div class="error">❌ 격자 데이터가 없습니다</div>';
-                return;
-            }
+            if (!gridData || gridData.length === 0) return;
 
             let gridHTML = `<div class="grid-wrapper"><div class="grid" style="grid-template-columns: repeat(${cols}, 60px);">`;
-
             for (let row = 0; row < rows; row++) {
                 for (let col = 0; col < cols; col++) {
                     const cell = gridData[row]?.[col];
                     if (!cell) continue;
-
-                    if (cell.merge && !cell.isStart) continue;
-
                     const value = cell.value || '';
                     const bg = cell.background || 'white';
-                    const colSpan = cell.merge ? (cell.merge.endCol - cell.merge.startCol + 1) : 1;
-                    const rowSpan = cell.merge ? (cell.merge.endRow - cell.merge.startRow + 1) : 1;
-
-                    gridHTML += `<div class="grid-cell" style="background: ${bg}; grid-column: span ${colSpan}; grid-row: span ${rowSpan};">${value}</div>`;
+                    gridHTML += `<div class="grid-cell" style="background: ${bg};">${value}</div>`;
                 }
             }
-
             gridHTML += `</div></div>`;
             document.getElementById('content').innerHTML = gridHTML;
         }
