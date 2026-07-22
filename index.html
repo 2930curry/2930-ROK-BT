@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2930 ROK 도시 배치</title>
+    <style>
+        body { font-family: 'Malgun Gothic', Arial; background: #f5f7fa; padding: 20px; }
+        .header { text-align: center; background: white; padding: 20px; border-radius: 12px; margin-bottom: 20px; }
+        h1 { color: #333; }
+        #content { background: white; padding: 40px; border-radius: 12px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏙️ 2930 ROK 도시 배치도</h1>
+    </div>
+    <div id="content">로딩 중...</div>
+    <script>
+        fetch("https://script.google.com/macros/s/AKfycbyS5oooxsC0detIHrNGd6pQVoUzWXlZopor1doajI801R3OOqo_isKu-EUMyxZMhuV3/exec")
+            .then(r => r.json())
+            .then(d => {
+                if (d.error) throw new Error(d.error);
+                document.getElementById('content').innerHTML = '<h2>✅ 데이터 로드 성공!</h2><pre>' + JSON.stringify(d, null, 2) + '</pre>';
+            })
+            .catch(e => {
+                document.getElementById('content').innerHTML = '<h2>❌ 에러: ' + e.message + '</h2>';
+            });
+    </script>
+</body>
+</html>
