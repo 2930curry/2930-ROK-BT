@@ -99,11 +99,13 @@
         </div>
 
         <div class="grid-container">
-            <div id="content"></div>
+            <div id="content">로딩 중...</div>
         </div>
     </div>
 
     <script>
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyS5oooxsC0detIHrNGd6pQVoUzWXlZopor1doajI801R3OOqo_isKu-EUMyxZMhuV3/exec";
+
         function getCellType(value) {
             if (!value) return 'empty';
             const strVal = String(value).trim();
@@ -113,33 +115,27 @@
             return 'empty';
         }
 
-        function renderGrid() {
-            const gridData = [
-                [null,null,null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,'도시',null,'도시',null,1,'BT1',null,null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,'도시',null,'도시',null,1,null,null,null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,1,1,null,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'BT2',null,null,1,'도시',null,'도시',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,null,null,null,1,'도시',null,'도시',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,1,null,1,1,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,'도시',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null],
-                [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]
-            ];
+        async function loadData() {
+            try {
+                const response = await fetch(APP_SCRIPT_URL);
+                const result = await response.json();
+
+                if (result.error) {
+                    document.getElementById('content').innerHTML = `<div style="color:#999;">오류: ${result.error}</div>`;
+                    return;
+                }
+
+                renderGrid(result.data);
+            } catch (error) {
+                document.getElementById('content').innerHTML = `<div style="color:#999;">로드 실패: ${error.message}</div>`;
+            }
+        }
+
+        function renderGrid(gridData) {
+            if (!gridData || gridData.length === 0) {
+                document.getElementById('content').innerHTML = '<div style="color:#999;">데이터가 없습니다</div>';
+                return;
+            }
 
             const cols = gridData[0].length;
             const rows = gridData.length;
@@ -157,7 +153,8 @@
             document.getElementById('content').innerHTML = gridHTML;
         }
 
-        renderGrid();
+        loadData();
+        setInterval(loadData, 5 * 60 * 1000);
     </script>
 </body>
 </html>
