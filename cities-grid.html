@@ -70,6 +70,7 @@
             font-weight: 600;
             text-align: center;
             padding: 8px;
+            transform: rotateZ(-45deg);
         }
 
         .grid-cell.city {
@@ -104,7 +105,8 @@
     </div>
 
     <script>
-        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyS5oooxsC0detIHrNGd6pQVoUzWXlZopor1doajI801R3OOqo_isKu-EUMyxZMhuV3/exec";
+        const SHEET_ID = "1RyJDgOVML5lTx5vb7DQpKp8JYIojbBA5U5R-8ZLtoOY";
+        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&range=H2:AQ27`;
 
         function getCellType(value) {
             if (!value) return 'empty';
@@ -115,17 +117,18 @@
             return 'empty';
         }
 
+        function parseCSV(csv) {
+            return csv.split('\n')
+                .filter(line => line.trim())
+                .map(row => row.split(',').map(cell => cell.trim()));
+        }
+
         async function loadData() {
             try {
-                const response = await fetch(APP_SCRIPT_URL);
-                const result = await response.json();
-
-                if (result.error) {
-                    document.getElementById('content').innerHTML = `<div style="color:#999;">오류: ${result.error}</div>`;
-                    return;
-                }
-
-                renderGrid(result.data);
+                const response = await fetch(CSV_URL);
+                const csv = await response.text();
+                const gridData = parseCSV(csv);
+                renderGrid(gridData);
             } catch (error) {
                 document.getElementById('content').innerHTML = `<div style="color:#999;">로드 실패: ${error.message}</div>`;
             }
@@ -155,6 +158,3 @@
 
         loadData();
         setInterval(loadData, 5 * 60 * 1000);
-    </script>
-</body>
-</html>
