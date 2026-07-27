@@ -125,9 +125,22 @@
 
         async function loadData() {
             try {
+                const cached = localStorage.getItem('gridData');
+                const cacheTime = localStorage.getItem('gridDataTime');
+                const now = Date.now();
+
+                if (cached && cacheTime && (now - parseInt(cacheTime)) < 5 * 60 * 1000) {
+                    renderGrid(JSON.parse(cached));
+                    return;
+                }
+
                 const response = await fetch(CSV_URL);
                 const csv = await response.text();
                 const gridData = parseCSV(csv);
+
+                localStorage.setItem('gridData', JSON.stringify(gridData));
+                localStorage.setItem('gridDataTime', now.toString());
+
                 renderGrid(gridData);
             } catch (error) {
                 document.getElementById('content').innerHTML = `<div style="color:#999;">로드 실패: ${error.message}</div>`;
@@ -158,3 +171,6 @@
 
         loadData();
         setInterval(loadData, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
