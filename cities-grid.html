@@ -105,8 +105,7 @@
     </div>
 
     <script>
-        const SHEET_ID = "1RyJDgOVML5lTx5vb7DQpKp8JYIojbBA5U5R-8ZLtoOY";
-        const CSV_URL = `https://api.allorigins.win/raw?url=${encodeURIComponent(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=0&range=H2:AQ27`)}`;
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyS5oooxsC0detIHrNGd6pQVoUzWXlZopor1doajI801R3OOqo_isKu-EUMyxZMhuV3/exec";
 
         function getCellType(value) {
             if (!value) return 'empty';
@@ -115,12 +114,6 @@
             if (/^BT\d+$/.test(strVal)) return 'building';
             if (strVal && strVal !== '도시') return 'special';
             return 'empty';
-        }
-
-        function parseCSV(csv) {
-            return csv.split('\n')
-                .filter(line => line.trim())
-                .map(row => row.split(',').map(cell => cell.trim()));
         }
 
         async function loadData() {
@@ -134,9 +127,9 @@
                     return;
                 }
 
-                const response = await fetch(CSV_URL);
-                const csv = await response.text();
-                const gridData = parseCSV(csv);
+                const response = await fetch(APP_SCRIPT_URL);
+                const result = await response.json();
+                const gridData = result.data;
 
                 localStorage.setItem('gridData', JSON.stringify(gridData));
                 localStorage.setItem('gridDataTime', now.toString());
